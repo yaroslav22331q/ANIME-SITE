@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime List</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://i.imgur.com/X6QqQ9W.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .header {
+            background-color: rgba(255, 107, 158, 0.8);
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 3px solid #9d65ff;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            border: 2px solid #6bb9ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ff6b9e, #9d65ff, #6bb9ff);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+
+        .anime-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .anime-item {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #ff6b9e;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+        .anime-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .anime-content {
+            flex: 1;
+            padding: 20px;
+            order: 1; /* Текст зліва */
+        }
+
+        .anime-image {
+            flex: 0 0 250px;
+            order: 2; /* Картинка справа */
+        }
+
+        .anime-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .anime-title {
+            color: #6bb9ff;
+            margin-top: 0;
+            font-size: 22px;
+            border-bottom: 2px solid #9d65ff;
+            padding-bottom: 10px;
+        }
+
+        .anime-description {
+            color: #555;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+
+        .anime-genres {
+            color: #ff6b9e;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .details-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b9e, #9d65ff);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .details-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .anime-decoration {
+            position: absolute;
+            font-size: 24px;
+            color: #ff6b9e;
+        }
+
+        .dec-1 { top: 15px; left: 15px; }
+        .dec-2 { top: 15px; right: 15px; }
+        .dec-3 { bottom: 15px; left: 15px; }
+        .dec-4 { bottom: 15px; right: 15px; }
+
+        @media (max-width: 768px) {
+            .anime-item {
+                flex-direction: column;
+            }
+
+            .anime-image {
+                order: 1;
+                flex: 1;
+            }
+
+            .anime-content {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Список Аніме</h1>
+    </header>
+
+    <div class="container">
+        <div class="anime-decoration dec-1">(>^.^)></div>
+        <div class="anime-decoration dec-2"><(^.^<)</div>
+        <div class="anime-decoration dec-3">(>^_^)> </div>
+        <div class="anime-decoration dec-4"> <(^_^<)</div>
+
+        <ul class="anime-list">
+            {% for anime in animes %}
+            <li class="anime-item">
+                <div class="anime-content">
+                    <h2 class="anime-title">{{ anime.title }}</h2>
+                    <p class="anime-description">{{ anime.description|truncatechars:150 }}</p>
+                    <p class="anime-genres">Жанри:
+                        {% for genre in anime.genres.all %}
+                            {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <a href="{% url 'anime_detail' slug=anime.slug %}" class="details-link">Детальніше</a>
+                </div>
+                <div class="anime-image">
+                    {% if anime.cover_image %}
+                        <img src="{{ anime.cover_image.url }}" alt="{{ anime.title }}">
+                    {% else %}
+                        <img src="{% static 'anime/default.jpg' %}" alt="No Image">
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аніме Авторизація</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://i.imgur.com/X6QqQ9W.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .auth-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+            width: 350px;
+            padding: 30px 25px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ff6b9e;
+        }
+
+        .auth-container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ff6b9e, #9d65ff, #6bb9ff);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.7;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b9e;
+            margin-bottom: 25px;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            padding: 0 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: calc(100% - 30px);
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: rgba(255,255,255,0.8);
+            margin: 0 auto;
+            display: block;
+        }
+
+        .input-group input:focus {
+            border-color: #ff6b9e;
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 107, 158, 0.4);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff6b9e, #9d65ff);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: calc(100% - 20px);
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin: 10px 10px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            padding: 0 10px;
+        }
+
+        .switch-link a {
+            color: #ff6b9e;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .switch-link a:hover {
+            text-shadow: 0 0 5px rgba(255, 107, 158, 0.5);
+        }
+
+        .anime-decoration {
+            position: absolute;
+            font-size: 24px;
+            color: #ff6b9e;
+        }
+
+        .dec-1 { top: 10px; left: 15px; }
+        .dec-2 { top: 10px; right: 15px; }
+        .dec-3 { bottom: 10px; left: 15px; }
+        .dec-4 { bottom: 10px; right: 15px; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="anime-decoration dec-1">(>^.^)></div>
+        <div class="anime-decoration dec-2"><(^.^<)</div>
+        <div class="anime-decoration dec-3">(>^_^)> </div>
+        <div class="anime-decoration dec-4"> <(^_^<)</div>
+
+        <h1 id="form-title">Реєстрація</h1>
+
+        <div class="input-group">
+            <label for="username">Ім'я користувача</label>
+            <input type="text" id="username" placeholder="Введіть ваше ім'я">
+        </div>
+
+        <div class="input-group">
+            <label for="email">Електронна пошта</label>
+            <input type="email" id="email" placeholder="Введіть вашу пошту">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" placeholder="Введіть пароль">
+        </div>
+
+        <div class="input-group" id="confirm-password-group">
+            <label for="confirm-password">Підтвердіть пароль</label>
+            <input type="password" id="confirm-password" placeholder="Повторіть пароль">
+        </div>
+
+        <button class="submit-btn" id="action-btn">Зареєструватися</button>
+
+        <div class="switch-link">
+            <span id="switch-text">Вже маєте акаунт? </span>
+            <a href="accounts/login" id="switch-link">Увійти</a>
+        </div>
+    </div>
+
+    <script>
+        // Визначаємо поточну сторінку
+        const isLoginPage = window.location.pathname.includes('accounts/login');
+        const titleElement = document.getElementById('form-title');
+        const actionBtn = document.getElementById('action-btn');
+        const confirmPasswordGroup = document.getElementById('confirm-password-group');
+        const switchText = document.getElementById('switch-text');
+        const switchLink = document.getElementById('switch-link');
+
+        // Налаштовуємо форму відповідно до поточної сторінки
+        if (isLoginPage) {
+            // Налаштування для сторінки входу
+            titleElement.textContent = 'Вхід';
+            actionBtn.textContent = 'Увійти';
+            confirmPasswordGroup.style.display = 'none';
+            switchText.textContent = 'Ще не маєте акаунту? ';
+            switchLink.textContent = 'Реєстрація';
+            switchLink.href = 'accounts/signup';
+        } else {
+            // Налаштування для сторінки реєстрації
+            switchLink.href = 'accounts/login';
+        }
+    </script>
+</body>
+</html>
